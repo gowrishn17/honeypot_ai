@@ -59,7 +59,7 @@ class HoneytokenStore(LoggerMixin):
                     token_value=honeytoken.token_value,
                     honeypot_id=honeytoken.honeypot_id,
                     file_path=honeytoken.file_path,
-                    metadata=honeytoken.metadata,
+                    token_metadata=honeytoken.token_metadata,
                 )
                 session.add(db_token)
                 session.commit()

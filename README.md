@@ -28,7 +28,7 @@ honeypot_ai/
 
 ### Prerequisites
 - Docker & Docker Compose
-- OpenAI API key (or local Ollama installation)
+- OpenRouter API key (FREE models available) or OpenAI API key
 
 ### Setup
 
@@ -38,18 +38,25 @@ git clone https://github.com/gowrishn17/honeypot_ai.git
 cd honeypot_ai
 ```
 
-2. **Configure environment**
+2. **Get a FREE OpenRouter API key**
+   - Go to https://openrouter.ai/
+   - Sign up for a free account
+   - Get your API key from https://openrouter.ai/keys
+   - OpenRouter provides access to FREE models like Mistral 7B and Llama 3 8B
+
+3. **Configure environment**
 ```bash
 cp .env.example .env
-# Edit .env and add your OPENAI_API_KEY
+# Edit .env and add your OPENAI_API_KEY (from OpenRouter)
+# The default configuration uses OpenRouter with free models
 ```
 
-3. **Start the services**
+4. **Start the services**
 ```bash
 docker-compose up -d
 ```
 
-4. **Verify the AI Brain is running**
+5. **Verify the AI Brain is running**
 ```bash
 curl http://localhost:8000/api/v1/health
 ```
@@ -117,9 +124,26 @@ See [`.env.example`](.env.example) for all configuration options.
 
 Key settings:
 - `LLM_PROVIDER`: Choose between `openai`, `azure`, or `ollama`
-- `OPENAI_API_KEY`: Your OpenAI API key
-- `OPENAI_MODEL`: Model to use (default: `gpt-4-turbo-preview`)
+- `OPENAI_API_KEY`: Your OpenRouter or OpenAI API key
+- `OPENAI_BASE_URL`: API base URL (default: `https://openrouter.ai/api/v1` for free models)
+- `LLM_MODEL`: Model to use (default: `mistralai/mistral-7b-instruct:free`)
 - `DATABASE_URL`: SQLite database for honeytoken tracking
+
+### Using OpenRouter (FREE Models)
+OpenRouter provides access to many FREE LLM models:
+- `mistralai/mistral-7b-instruct:free` (default)
+- `meta-llama/llama-3-8b-instruct:free`
+- `google/gemma-7b-it:free`
+
+Get your free API key at https://openrouter.ai/keys
+
+### Using OpenAI (Paid)
+To use OpenAI directly:
+```bash
+OPENAI_API_KEY=sk-your-openai-key
+OPENAI_BASE_URL=https://api.openai.com/v1
+LLM_MODEL=gpt-4-turbo-preview
+```
 
 ## 📖 Documentation
 
