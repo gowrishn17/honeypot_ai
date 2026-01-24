@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  content-generator:
+    build: ./ai-brain/content-generator
+    container_name: ai-brain
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./honeypots:/honeypots  # Access to honeypot filesystems
+      - ./data:/data            # Persistent storage
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4-turbo-preview}
+      - LLM_PROVIDER=${LLM_PROVIDER:-openai}
+      - DATABASE_URL=sqlite:///data/honeytokens.db
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - HONEYPOTS_BASE_DIR=/honeypots
+      - DATA_DIR=/data
+    networks:
+      - honeypot-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Placeholder for future Phase 1 honeypots
+  # ssh-honeypot:
+  #   build: ./honeypots/ssh
+  #   container_name: ssh-honeypot
+  #   ports:
+  #     - "2222:22"
+  #   networks:
+  #     - honeypot-net
+
+  # web-honeypot:
+  #   build: ./honeypots/web
+  #   container_name: web-honeypot
+  #   ports:
+  #     - "8080:80"
+  #   networks:
+  #     - honeypot-net
+
+networks:
+  honeypot-net:
+    driver: bridge
+
+volumes:
+  honeypot-data:
+    driver: local
