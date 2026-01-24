@@ -29,7 +29,7 @@ class HoneytokenDB(Base):
     accessed_at = Column(DateTime)
     access_count = Column(Integer, default=0)
     is_active = Column(Boolean, default=True)
-    metadata = Column(JSON)
+    token_metadata = Column(JSON)
 
 
 class GenerationLogDB(Base):
@@ -47,7 +47,7 @@ class GenerationLogDB(Base):
     is_valid = Column(Boolean)
     created_at = Column(DateTime, default=func.now(), nullable=False)
     generation_time_ms = Column(Integer)
-    metadata = Column(JSON)
+    token_metadata = Column(JSON)
 
 
 # Pydantic Models
@@ -58,7 +58,7 @@ class HoneytokenCreate(BaseModel):
     token_value: str
     honeypot_id: Optional[str] = None
     file_path: Optional[str] = None
-    metadata: dict = Field(default_factory=dict)
+    token_metadata: dict = Field(default_factory=dict)
 
 
 class HoneytokenResponse(BaseModel):
@@ -74,7 +74,7 @@ class HoneytokenResponse(BaseModel):
     accessed_at: Optional[datetime]
     access_count: int
     is_active: bool
-    metadata: dict
+    token_metadata: dict
 
     class Config:
         from_attributes = True
@@ -99,7 +99,7 @@ class GenerationLogCreate(BaseModel):
     validation_score: float
     is_valid: bool
     generation_time_ms: int
-    metadata: dict = Field(default_factory=dict)
+    token_metadata: dict = Field(default_factory=dict)
 
 
 class GenerationLogResponse(BaseModel):
@@ -115,7 +115,7 @@ class GenerationLogResponse(BaseModel):
     is_valid: bool
     created_at: datetime
     generation_time_ms: int
-    metadata: dict
+    token_metadata: dict
 
     class Config:
         from_attributes = True

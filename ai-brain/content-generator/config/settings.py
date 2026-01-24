@@ -52,16 +52,17 @@ class Settings(BaseSettings):
 
     # LLM Configuration
     llm_provider: LLMProvider = Field(default=LLMProvider.OPENAI, alias="LLM_PROVIDER")
-    llm_model: str = Field(default="gpt-4", alias="LLM_MODEL")
+    llm_model: str = Field(default="mistralai/mistral-7b-instruct:free", alias="LLM_MODEL")
     llm_temperature: float = Field(default=0.7, alias="LLM_TEMPERATURE")
     llm_max_tokens: int = Field(default=2048, alias="LLM_MAX_TOKENS")
     llm_timeout: int = Field(default=60, alias="LLM_TIMEOUT")
     llm_max_retries: int = Field(default=3, alias="LLM_MAX_RETRIES")
     llm_retry_delay: int = Field(default=2, alias="LLM_RETRY_DELAY")
 
-    # OpenAI
+    # OpenAI / OpenRouter
     openai_api_key: Optional[str] = Field(default=None, alias="OPENAI_API_KEY")
     openai_org_id: Optional[str] = Field(default=None, alias="OPENAI_ORG_ID")
+    openai_base_url: Optional[str] = Field(default="https://openrouter.ai/api/v1", alias="OPENAI_BASE_URL")
 
     # Azure OpenAI
     azure_openai_api_key: Optional[str] = Field(default=None, alias="AZURE_OPENAI_API_KEY")

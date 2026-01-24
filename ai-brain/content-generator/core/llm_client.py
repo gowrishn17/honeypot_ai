@@ -59,6 +59,7 @@ class LLMClient(LoggerMixin):
         self.client = AsyncOpenAI(
             api_key=settings.openai_api_key,
             organization=settings.openai_org_id,
+            base_url=settings.openai_base_url,
             timeout=self.timeout,
             max_retries=0,  # We handle retries manually
         )

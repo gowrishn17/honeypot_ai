@@ -39,7 +39,7 @@ class GenerationLog(LoggerMixin):
                     validation_score=log_entry.validation_score,
                     is_valid=log_entry.is_valid,
                     generation_time_ms=log_entry.generation_time_ms,
-                    metadata=log_entry.metadata,
+                    token_metadata=log_entry.token_metadata,
                 )
                 session.add(db_log)
                 session.commit()
