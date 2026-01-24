@@ -61,7 +61,8 @@ def calculate_entropy(text: str) -> float:
     for count in freq.values():
         probability = count / length
         if probability > 0:
-            entropy -= probability * (probability ** 0.5)  # Simplified entropy calculation
+            # Proper Shannon entropy calculation
+            entropy -= probability * math.log2(probability)
 
     return entropy
 

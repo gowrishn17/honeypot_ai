@@ -2,6 +2,7 @@
 
 from fastapi import APIRouter, Depends
 
+from api.dependencies import get_generation_log, get_honeytoken_store
 from api.schemas.responses import HealthResponse, MetricsResponse
 from config.settings import settings
 from storage.generation_log import GenerationLog
@@ -22,12 +23,12 @@ async def health_check():
 
 
 @router.get("/metrics", response_model=MetricsResponse)
-async def get_metrics():
+async def get_metrics(
+    gen_log: GenerationLog = Depends(get_generation_log),
+    token_store: HoneytokenStore = Depends(get_honeytoken_store),
+):
     """Get system metrics."""
     # This is a simplified version - in production, use proper metrics collection
-    gen_log = GenerationLog()
-    token_store = HoneytokenStore()
-    
     all_logs = gen_log.get_logs(limit=10000)
     all_tokens = token_store.list_honeytokens(active_only=False, limit=10000)
     active_tokens = token_store.list_honeytokens(active_only=True, limit=10000)

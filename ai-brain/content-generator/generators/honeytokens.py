@@ -93,11 +93,12 @@ class HoneytokenGenerator(BaseGenerator):
         chars = string.ascii_letters + string.digits + "+/="
         
         for _ in range(25):
-            line = ''.join(random.choices(chars, k=64))
+            # Use secrets for cryptographic-looking content
+            line = ''.join(secrets.choice(chars) for _ in range(64))
             key_data_lines.append(line)
         
         # Last line is shorter
-        key_data_lines.append(''.join(random.choices(chars, k=random.randint(20, 40))))
+        key_data_lines.append(''.join(secrets.choice(chars) for _ in range(random.randint(20, 40))))
         
         key = "-----BEGIN OPENSSH PRIVATE KEY-----\n"
         key += "\n".join(key_data_lines)

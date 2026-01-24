@@ -200,8 +200,8 @@ class SyntaxValidator(BaseValidator):
         """Generic validation for unknown types."""
         warnings = ["No specific validator for this file type"]
         
-        # Basic checks
-        is_valid = len(content) > 0 and content.isprintable() or '\n' in content
+        # Basic checks - fix operator precedence
+        is_valid = len(content) > 0 and (content.isprintable() or '\n' in content)
         
         return self._create_result(
             is_valid,
