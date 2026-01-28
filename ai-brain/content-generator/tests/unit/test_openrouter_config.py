@@ -84,7 +84,7 @@ def test_llm_client_accepts_base_url():
 def test_openrouter_headers():
     """Test that OpenRouter-specific headers are set."""
     from config import settings as settings_module
-    
+
     with patch.object(settings_module.settings, "openai_api_key", "sk-or-v1-test"):
         with patch.object(settings_module.settings, "openai_base_url", "https://openrouter.ai/api/v1"):
             with patch.object(settings_module.settings, "llm_model", "google/gemini-2.0-flash-exp:free"):
