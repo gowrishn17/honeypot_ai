@@ -100,6 +100,23 @@ def test_openrouter_headers():
                 assert client.client.default_headers["X-Title"] == "Honeypot AI Content Generator"
 
 
+def test_direct_openai_no_openrouter_headers():
+    """Test that OpenRouter headers are NOT set when using direct OpenAI."""
+    from config import settings as settings_module
+
+    with patch.object(settings_module.settings, "openai_api_key", "sk-test-key"):
+        with patch.object(settings_module.settings, "openai_base_url", "https://api.openai.com/v1"):
+            with patch.object(settings_module.settings, "llm_model", "gpt-4-turbo-preview"):
+                from core.llm_client import LLMClient
+                client = LLMClient()
+                # Verify headers are NOT set for direct OpenAI
+                assert hasattr(client, "client")
+                # The client will have its own default headers, but not our custom OpenRouter headers
+                headers = dict(client.client.default_headers) if client.client.default_headers else {}
+                assert "HTTP-Referer" not in headers
+                assert "X-Title" not in headers
+
+
 def test_settings_with_env_variables():
     """Test that settings can be loaded from environment variables."""
     env_vars = {
