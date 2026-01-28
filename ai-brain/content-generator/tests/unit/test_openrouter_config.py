@@ -15,8 +15,8 @@ def test_openrouter_default_settings():
         # Should default to OpenRouter base URL
         assert settings.openai_base_url == "https://openrouter.ai/api/v1"
         
-        # Should default to free Mistral model
-        assert settings.llm_model == "mistralai/mistral-7b-instruct:free"
+        # Should default to free Llama 4 Scout model
+        assert settings.llm_model == "meta-llama/llama-4-scout:free"
 
 
 def test_openrouter_custom_settings():
@@ -24,7 +24,7 @@ def test_openrouter_custom_settings():
     env_vars = {
         'OPENAI_API_KEY': 'sk-or-v1-test-key',
         'OPENAI_BASE_URL': 'https://openrouter.ai/api/v1',
-        'LLM_MODEL': 'meta-llama/llama-3-8b-instruct:free'
+        'LLM_MODEL': 'meta-llama/llama-4-maverick:free'
     }
     
     with patch.dict(os.environ, env_vars, clear=True):
@@ -33,7 +33,7 @@ def test_openrouter_custom_settings():
         
         assert settings.openai_api_key == "sk-or-v1-test-key"
         assert settings.openai_base_url == "https://openrouter.ai/api/v1"
-        assert settings.llm_model == "meta-llama/llama-3-8b-instruct:free"
+        assert settings.llm_model == "meta-llama/llama-4-maverick:free"
 
 
 def test_openai_direct_settings():
@@ -61,14 +61,14 @@ def test_llm_client_accepts_base_url():
     # Patch settings to have test values
     with patch.object(settings_module.settings, 'openai_api_key', 'test-key'):
         with patch.object(settings_module.settings, 'openai_base_url', 'https://openrouter.ai/api/v1'):
-            with patch.object(settings_module.settings, 'llm_model', 'mistralai/mistral-7b-instruct:free'):
+            with patch.object(settings_module.settings, 'llm_model', 'meta-llama/llama-4-scout:free'):
                 from core.llm_client import LLMClient
                 
                 # This should not raise an error
                 client = LLMClient()
                 
                 # Verify client attributes
-                assert client.model == 'mistralai/mistral-7b-instruct:free'
+                assert client.model == 'meta-llama/llama-4-scout:free'
                 assert hasattr(client, 'client')
 
 
@@ -77,7 +77,7 @@ def test_settings_with_env_variables():
     env_vars = {
         'OPENAI_API_KEY': 'sk-or-v1-env-key',
         'OPENAI_BASE_URL': 'https://openrouter.ai/api/v1',
-        'LLM_MODEL': 'google/gemma-7b-it:free'
+        'LLM_MODEL': 'mistralai/devstral-2-2512:free'
     }
     
     with patch.dict(os.environ, env_vars, clear=True):
@@ -86,5 +86,5 @@ def test_settings_with_env_variables():
         
         assert settings.openai_api_key == 'sk-or-v1-env-key'
         assert settings.openai_base_url == 'https://openrouter.ai/api/v1'
-        assert settings.llm_model == 'google/gemma-7b-it:free'
+        assert settings.llm_model == 'mistralai/devstral-2-2512:free'
 

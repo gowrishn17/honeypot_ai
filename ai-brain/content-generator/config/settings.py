@@ -52,7 +52,7 @@ class Settings(BaseSettings):
 
     # LLM Configuration
     llm_provider: LLMProvider = Field(default=LLMProvider.OPENAI, alias="LLM_PROVIDER")
-    llm_model: str = Field(default="mistralai/mistral-7b-instruct:free", alias="LLM_MODEL")
+    llm_model: str = Field(default="meta-llama/llama-4-scout:free", alias="LLM_MODEL")
     llm_temperature: float = Field(default=0.7, alias="LLM_TEMPERATURE")
     llm_max_tokens: int = Field(default=2048, alias="LLM_MAX_TOKENS")
     llm_timeout: int = Field(default=60, alias="LLM_TIMEOUT")
