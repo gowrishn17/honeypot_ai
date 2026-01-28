@@ -60,15 +60,18 @@ def setup_logging() -> None:
 
     # Configure file logging if specified
     if settings.log_file:
-        log_file = Path(settings.log_file)
-        log_file.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            log_file = Path(settings.log_file)
+            log_file.parent.mkdir(parents=True, exist_ok=True)
 
-        file_handler = logging.FileHandler(log_file)
-        file_handler.setLevel(log_level)
-        file_handler.setFormatter(logging.Formatter("%(message)s"))
+            file_handler = logging.FileHandler(log_file)
+            file_handler.setLevel(log_level)
+            file_handler.setFormatter(logging.Formatter("%(message)s"))
 
-        root_logger = logging.getLogger()
-        root_logger.addHandler(file_handler)
+            root_logger = logging.getLogger()
+            root_logger.addHandler(file_handler)
+        except (PermissionError, OSError) as e:
+            print(f"Warning: Could not create log file: {e}", file=sys.stderr)
 
 
 def get_logger(name: str) -> structlog.stdlib.BoundLogger:

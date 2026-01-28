@@ -61,6 +61,8 @@ docker-compose up -d
 curl http://localhost:8000/api/v1/health
 ```
 
+> **Note**: Access the API at `http://127.0.0.1:8000` or `http://localhost:8000` in your browser, **NOT** `http://0.0.0.0:8000`. The API documentation is available at `http://127.0.0.1:8000/docs`.
+
 ## 📚 Phase Status
 
 ### ✅ Phase 2: AI Content Generator (Current)
