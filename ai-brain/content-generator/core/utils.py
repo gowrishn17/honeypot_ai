@@ -3,10 +3,10 @@ Utility functions and helpers.
 """
 
 import hashlib
+import math
 import random
 import re
 import secrets
-import string
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any

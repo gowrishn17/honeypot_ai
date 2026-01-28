@@ -63,6 +63,8 @@ class SecurityValidator(BaseValidator):
                 # Check if it's marked as honeytoken
                 line_start = content.rfind('\n', 0, match.start())
                 line_end = content.find('\n', match.end())
+                # Handle case when there's no newline before or after the match
+                line_start = line_start + 1 if line_start != -1 else 0
                 line = content[line_start:line_end] if line_end != -1 else content[line_start:]
                 
                 is_honeytoken = any(marker.search(line) for marker in self.HONEYTOKEN_MARKERS.values())
