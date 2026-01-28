@@ -42,7 +42,7 @@ cd honeypot_ai
    - Go to https://openrouter.ai/
    - Sign up for a free account
    - Get your API key from https://openrouter.ai/keys
-   - OpenRouter provides access to FREE models like Mistral 7B and Llama 3 8B
+   - OpenRouter provides access to FREE models like Llama 3.2, Gemini, and Qwen
 
 3. **Configure environment**
 ```bash
@@ -126,14 +126,17 @@ Key settings:
 - `LLM_PROVIDER`: Choose between `openai`, `azure`, or `ollama`
 - `OPENAI_API_KEY`: Your OpenRouter or OpenAI API key
 - `OPENAI_BASE_URL`: API base URL (default: `https://openrouter.ai/api/v1` for free models)
-- `LLM_MODEL`: Model to use (default: `mistralai/mistral-7b-instruct:free`)
+- `LLM_MODEL`: Model to use (default: `meta-llama/llama-3.2-3b-instruct:free`)
 - `DATABASE_URL`: SQLite database for honeytoken tracking
 
 ### Using OpenRouter (FREE Models)
 OpenRouter provides access to many FREE LLM models:
-- `mistralai/mistral-7b-instruct:free` (default)
-- `meta-llama/llama-3-8b-instruct:free`
-- `google/gemma-7b-it:free`
+- `meta-llama/llama-3.2-3b-instruct:free` (default) - Fast and efficient
+- `google/gemini-2.0-flash-exp:free` - Google's latest experimental model
+- `qwen/qwen-2.5-7b-instruct:free` - Alibaba's Qwen 2.5 model
+- `google/gemini-flash-1.5:free` - Fast Google Gemini model
+- `nousresearch/hermes-3-llama-3.1-405b:free` - Large 405B parameter model
+- `meta-llama/llama-3.2-1b-instruct:free` - Smaller, very fast model
 
 Get your free API key at https://openrouter.ai/keys
 
