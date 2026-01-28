@@ -18,6 +18,12 @@ from core.exceptions import ContentGeneratorError
 async def lifespan(app: FastAPI):
     """Application lifespan events."""
     # Startup
+    # Create required directories
+    from pathlib import Path
+    Path("./data").mkdir(parents=True, exist_ok=True)
+    Path("./logs").mkdir(parents=True, exist_ok=True)
+    Path("./data/generated").mkdir(parents=True, exist_ok=True)
+    
     setup_logging()
     yield
     # Shutdown
