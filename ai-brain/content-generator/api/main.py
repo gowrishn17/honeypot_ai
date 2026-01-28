@@ -3,6 +3,7 @@ FastAPI main application.
 """
 
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,11 +20,13 @@ async def lifespan(app: FastAPI):
     """Application lifespan events."""
     # Startup
     # Create required directories
-    from pathlib import Path
-    Path("./data").mkdir(parents=True, exist_ok=True)
-    Path("./logs").mkdir(parents=True, exist_ok=True)
-    Path("./data/generated").mkdir(parents=True, exist_ok=True)
-    
+    try:
+        Path("./data").mkdir(parents=True, exist_ok=True)
+        Path("./logs").mkdir(parents=True, exist_ok=True)
+        Path("./data/generated").mkdir(parents=True, exist_ok=True)
+    except (PermissionError, OSError) as e:
+        print(f"Warning: Could not create directories: {e}")
+
     setup_logging()
     yield
     # Shutdown

@@ -77,7 +77,7 @@ python main.py api
 API will be available at:
 - API: http://127.0.0.1:8000 or http://localhost:8000
 - Docs: http://127.0.0.1:8000/docs or http://localhost:8000/docs
-- Health: http://127.0.0.1:8000/api/v1/health
+- Health: http://127.0.0.1:8000/api/v1/health or http://localhost:8000/api/v1/health
 
 > **Note**: Use `http://127.0.0.1:8000` or `http://localhost:8000` in your browser, **NOT** `http://0.0.0.0:8000`.
 
