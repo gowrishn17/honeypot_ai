@@ -24,7 +24,7 @@ OPENAI_API_KEY=sk-or-v1-your-actual-key-here
 OPENAI_BASE_URL=https://openrouter.ai/api/v1
 
 # Choose a FREE model (recommended)
-LLM_MODEL=meta-llama/llama-3.2-3b-instruct:free
+LLM_MODEL=google/gemini-2.0-flash-exp:free
 
 # Optional: Adjust generation parameters
 LLM_TEMPERATURE=0.7
@@ -38,9 +38,9 @@ OpenRouter provides several FREE models you can use:
 
 | Model | Description | Best For |
 |-------|-------------|----------|
-| `meta-llama/llama-3.2-3b-instruct:free` | Fast, efficient 3B model (default) | General purpose, quick responses |
+| `google/gemini-2.0-flash-exp:free` | Google's latest experimental model (default) | Advanced reasoning |
+| `meta-llama/llama-3.2-3b-instruct:free` | Fast, efficient 3B model | General purpose, quick responses |
 | `meta-llama/llama-3.2-1b-instruct:free` | Very fast 1B model | Simple tasks, maximum speed |
-| `google/gemini-2.0-flash-exp:free` | Google's latest experimental model | Advanced reasoning |
 | `google/gemini-flash-1.5:free` | Fast Google model | Quick tasks |
 | `qwen/qwen-2.5-7b-instruct:free` | Alibaba's 7B model | Balanced performance |
 | `nousresearch/hermes-3-llama-3.1-405b:free` | Large 405B model | Complex tasks |
@@ -60,12 +60,14 @@ OpenRouter provides several FREE models you can use:
 
 ### Error: "Authentication failed" or "401"
 
-**Cause**: Missing or invalid API key.
+**Cause**: Missing or invalid API key, or missing required OpenRouter headers.
 
 **Solution**:
 1. Verify your API key starts with `sk-or-v1-`
 2. Check that `OPENAI_API_KEY` is set in your `.env` file
-3. Regenerate your API key at https://openrouter.ai/keys if needed
+3. Ensure `OPENAI_BASE_URL` is set to `https://openrouter.ai/api/v1`
+4. Make sure you're using an up-to-date version of the code that includes OpenRouter headers (HTTP-Referer and X-Title)
+5. Regenerate your API key at https://openrouter.ai/keys if needed
 
 ### Error: "Connection failed"
 

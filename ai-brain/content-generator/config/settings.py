@@ -53,7 +53,7 @@ class Settings(BaseSettings):
     # LLM Configuration
     llm_provider: LLMProvider = Field(default=LLMProvider.OPENAI, alias="LLM_PROVIDER")
     llm_model: str = Field(
-        default="meta-llama/llama-3.2-3b-instruct:free", alias="LLM_MODEL"
+        default="google/gemini-2.0-flash-exp:free", alias="LLM_MODEL"
     )
     llm_temperature: float = Field(default=0.7, alias="LLM_TEMPERATURE")
     llm_max_tokens: int = Field(default=2048, alias="LLM_MAX_TOKENS")
