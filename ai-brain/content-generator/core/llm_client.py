@@ -56,12 +56,21 @@ class LLMClient(LoggerMixin):
         if not settings.openai_api_key:
             raise LLMAuthenticationError("OpenAI API key not configured")
 
+        # Build default headers for OpenRouter compatibility
+        default_headers = {}
+        if "openrouter.ai" in (settings.openai_base_url or ""):
+            default_headers = {
+                "HTTP-Referer": "https://github.com/gowrishn17/honeypot_ai",
+                "X-Title": "Honeypot AI Content Generator",
+            }
+
         self.client = AsyncOpenAI(
             api_key=settings.openai_api_key,
             organization=settings.openai_org_id,
             base_url=settings.openai_base_url,
             timeout=self.timeout,
             max_retries=0,  # We handle retries manually
+            default_headers=default_headers if default_headers else None,
         )
 
     def _init_azure_openai(self) -> None:
