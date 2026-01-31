@@ -159,17 +159,33 @@ class HoneytokenGenerator(BaseGenerator):
             return f"{random.choice(facility_codes)}-{random.randint(10000000, 99999999)}"
 
     def _generate_ssn(self, context: dict[str, Any]) -> str:
-        """Generate fake SSN (Social Security Number format)."""
-        # Use invalid SSN ranges per SSA rules (900-999 area numbers are invalid)
-        area = random.randint(900, 999)  # Invalid range
+        """Generate fake SSN (Social Security Number format).
+        
+        Uses SSA-invalid area numbers (900-999) per Social Security Administration rules:
+        https://www.ssa.gov/employer/stateweb.htm
+        Area numbers 900-999 were never assigned and are safe for testing.
+        """
+        # Area numbers 900-999 are invalid per SSA - they were never issued
+        area = random.randint(900, 999)
         group = random.randint(10, 99)
         serial = random.randint(1000, 9999)
         return f"{area}-{group:02d}-{serial}"
 
     def _generate_credit_card(self, context: dict[str, Any]) -> str:
-        """Generate fake credit card number (test/invalid format)."""
-        # Use known test card prefixes that won't pass validation
-        test_prefixes = ["5500", "4111", "3782"]  # Test card prefixes
+        """Generate fake credit card number (test/invalid format).
+        
+        Uses well-known test card prefixes that won't pass production validation:
+        - 4111: Visa test card prefix
+        - 5500: Mastercard test card prefix  
+        - 3782: American Express test card prefix
+        Note: Generated numbers have invalid Luhn checksums.
+        """
+        # Well-known test card prefixes by network
+        test_prefixes = [
+            "4111",  # Visa test
+            "5500",  # Mastercard test
+            "3782",  # American Express test
+        ]
         prefix = random.choice(test_prefixes)
         
         # Generate remaining digits (without valid Luhn checksum)

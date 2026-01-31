@@ -141,27 +141,27 @@ class PopulationStrategy(BasePopulator):
         files.append({"path": ".bash_history", "content": history.content, "permissions": 0o600})
         
         # Generate and embed honeytokens in credentials file
-        aws_key = await self._generate_and_persist_honeytoken(
+        aws_access_key_value = await self._generate_and_persist_honeytoken(
             "aws_access_key", honeypot_id, ".aws/credentials"
         )
-        aws_secret = await self._generate_and_persist_honeytoken(
+        aws_secret_key_value = await self._generate_and_persist_honeytoken(
             "aws_secret_key", honeypot_id, ".aws/credentials"
         )
-        github_token = await self._generate_and_persist_honeytoken(
+        github_token_value = await self._generate_and_persist_honeytoken(
             "github_token", honeypot_id, ".config/gh/hosts.yml"
         )
         
         # Create AWS credentials file with honeytokens
         aws_creds_content = f"""[default]
-aws_access_key_id = {aws_key}
-aws_secret_access_key = {aws_secret}
+aws_access_key_id = {aws_access_key_value}
+aws_secret_access_key = {aws_secret_key_value}
 region = us-east-1
 """
         files.append({"path": ".aws/credentials", "content": aws_creds_content, "permissions": 0o600})
         
         # Create GitHub hosts config with honeytoken
         gh_hosts_content = f"""github.com:
-    oauth_token: {github_token}
+    oauth_token: {github_token_value}
     user: developer
     git_protocol: ssh
 """
