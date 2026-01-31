@@ -6,7 +6,7 @@ import time
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from api.dependencies import get_llm_client
+from api.dependencies import get_honeytoken_store, get_llm_client
 from api.schemas.requests import (
     ConfigRequest,
     DocumentRequest,
@@ -22,6 +22,8 @@ from generators.honeytokens import HoneytokenGenerator
 from generators.source_code import SourceCodeGenerator
 from generators.system_logs import SystemLogGenerator
 from generators.user_documents import UserDocumentGenerator
+from storage.honeytoken_store import HoneytokenStore
+from storage.models import HoneytokenCreate
 
 router = APIRouter(prefix="/api/v1/generate", tags=["generation"])
 
@@ -120,6 +122,10 @@ async def generate_logs(
         "log_type": request.log_type,
         "duration_hours": request.duration_hours,
         "attack_activity": request.attack_activity,
+        "log_category": request.log_category.value if request.log_category else "system",
+        "log_format": request.log_format,
+        "industry": request.industry,
+        "compliance": request.compliance,
         **request.context,
     }
     
@@ -161,6 +167,11 @@ async def generate_document(
         "doc_type": request.doc_type,
         "persona": request.persona,
         "topic": request.topic,
+        "audience": request.audience.value if request.audience else "internal",
+        "realism_level": request.realism_level.value if request.realism_level else "high",
+        "hide_honeypot_concepts": request.hide_honeypot_concepts,
+        "industry": request.industry,
+        "compliance": request.compliance,
         **request.context,
     }
     
@@ -193,8 +204,9 @@ async def generate_document(
 async def generate_honeytoken(
     request: HoneytokenRequest,
     llm_client: LLMClient = Depends(get_llm_client),
+    honeytoken_store: HoneytokenStore = Depends(get_honeytoken_store),
 ):
-    """Generate honeytoken."""
+    """Generate honeytoken and persist it to the store."""
     start_time = time.time()
     
     generator = HoneytokenGenerator(llm_client)
@@ -205,6 +217,19 @@ async def generate_honeytoken(
     
     result = await generator.generate(context)
     generation_time_ms = int((time.time() - start_time) * 1000)
+    
+    # Persist the generated honeytoken to the store
+    token_create = HoneytokenCreate(
+        token_type=request.token_type,
+        token_value=result.content,
+        honeypot_id=request.honeypot_id,
+        file_path=request.context.get("file_path"),
+        token_metadata={
+            "generation_time_ms": generation_time_ms,
+            **result.metadata,
+        },
+    )
+    stored_token = honeytoken_store.create_honeytoken(token_create)
     
     validation = {
         name: ValidationDetail(
@@ -217,11 +242,16 @@ async def generate_honeytoken(
     }
     
     return GenerateResponse(
-        generation_id=generate_unique_id(),
+        generation_id=stored_token.token_id,  # Use the stored token_id as generation_id
         content=result.content,
         content_type=result.content_type,
         file_type=result.file_type,
-        metadata={**result.metadata, "generation_time_ms": generation_time_ms},
+        metadata={
+            **result.metadata,
+            "generation_time_ms": generation_time_ms,
+            "token_id": stored_token.token_id,
+            "honeypot_id": request.honeypot_id,
+        },
         validation=validation,
         is_valid=result.is_valid,
         overall_score=result.overall_score,

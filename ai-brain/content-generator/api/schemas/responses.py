@@ -47,11 +47,14 @@ class HoneytokenResponse(BaseModel):
 
     token_id: str
     token_type: str
+    token_value: Optional[str] = None  # Optionally return value for verification
     honeypot_id: Optional[str]
+    file_path: Optional[str] = None
     is_active: bool
     created_at: datetime
     accessed_at: Optional[datetime]
     access_count: int
+    token_metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class HoneytokenCheckResponse(BaseModel):
